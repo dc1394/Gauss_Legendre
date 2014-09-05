@@ -1,39 +1,131 @@
-#include "aligned_malloc_allocator.h"
-#include <vector>
-#include <functional>
+﻿//-----------------------------------------------------------------------
+// <copyright file="Function.h" company="dc1394's software">
+//     Copyright ©  2014 @dc1394 All Rights Reserved.
+// </copyright>
+//-----------------------------------------------------------------------
+#pragma once
+
+#include "Function.h"
 #include <cstdint>
-#include <intrin.h>
+#include <vector>
+//#include <intrin.h>
+#include <ap.h>
+#include <boost/simd/memory/allocator.hpp>
+//#include <dvec.h>
+#include <boost/simd/sdk/simd/native.hpp>
+//#include <boost/simd/include/functions/sum.hpp>
+//#include <boost/simd/include/functions/load.hpp>
+//#include <boost/simd/include/functions/plus.hpp>
+//#include <boost/simd/include/functions/multiplies.hpp>
 
-#if !defined(__INTEL_COMPILER) && !defined(__GXX_EXPERIMENTAL_CXX0X__)
-	#include <boost/noncopyable.hpp>
-#endif
-
-namespace Gauss_Legendre {
-	class Gauss_Legendre
-#if !defined(__INTEL_COMPILER) && !defined(__GXX_EXPERIMENTAL_CXX0X__)
-		: private boost::noncopyable
-#endif
+namespace gausslegendre {
+    //! A class.
+    /*!
+    Gauss-Legendre積分を行うクラス
+    */
+	class Gauss_Legendre final
 	{
-#if defined(__INTEL_COMPILER) || defined(__GXX_EXPERIMENTAL_CXX0X__)
+    public:
+        // #region コンストラクタ
+
+        //! A constructor.
+        /*!
+        唯一のコンストラクタ
+        Gauss-Legendreの重みと節を計算して、それぞれw_とx_に格納する
+        \param n Gauss-Legendreの分点
+        */
+        explicit Gauss_Legendre(std::uint32_t n);
+
+        // #endregion コンストラクタ
+
+        // #region メンバ関数
+
+        //! A public member function (template function).
+        /*!
+        Gauss-Legendre積分を実行する
+        \param func 被積分関数
+        \param usesimd SIMDを使用するかどうか
+        \param x1 積分の下端
+        \param x2 積分の上端
+        \return 積分値
+        */
+        template <typename FUNCTYPE>
+        double qgauss(const myfunctional::Function<FUNCTYPE> & func, bool usesimd, double x1, double x2) const;
+
+    private:
+        //! A private member function.
+        /*!
+        AVX命令が使用可能かどうかをチェックする
+        \return AVX命令が使用可能ならtrue、使用不可能ならfalse
+        */
+        bool availableAVX() const;
+
+        // #endregion メンバ関数
+
+        // #region メンバ変数
+
+        //! A private member variable (const).
+        /*!
+        AVX命令が使用可能かどうか
+        */
+        const bool avxSupported;
+
+        //! A private member variable (const).
+        /*!
+        Gauss-Legendreの分点
+        */
+        const std::uint32_t n_;
+
+        //! A private member variable.
+        /*!
+        Gauss-Legendreの重み（alignmentが揃ってない）
+        */
+        alglib::real_1d_array w_;
+
+        //! A private member variable.
+        /*!
+        Gauss-Legendreの重み（alignmentが揃っている）
+        */
+        std::vector<double, boost::simd::allocator<double, 32>> waligned_;
+
+        //! A private member variable.
+        /*!
+        Gauss-Legendreの節（alignmentが揃ってない）
+        */
+        alglib::real_1d_array x_;
+
+        //! A private member variable.
+        /*!
+        Gauss-Legendreの節（alignmentが揃っている）
+        */
+        std::vector<double, boost::simd::allocator<double, 32>> xaligned_;
+        
+        // #endregion メンバ変数
+
+        // #region 禁止されたコンストラクタ・メンバ関数
+
+        //! A private constructor (deleted).
+        /*!
+        デフォルトコンストラクタ（禁止）
+        */
+        Gauss_Legendre() = delete;
+
+        //! A private copy constructor (deleted).
+        /*!
+        コピーコンストラクタ（禁止）
+        */
 		Gauss_Legendre(const Gauss_Legendre &) = delete;
+
+        //! operator=() (deleted).
+        /*!
+        デフォルトコンストラクタ（禁止）
+        \param コピー元のオブジェクト
+        \return コピー元のオブジェクト
+        */
 		Gauss_Legendre & operator=(const Gauss_Legendre &) = delete;
-		Gauss_Legendre() = delete;
-		static constexpr double EPS = 1.0E-15;
-#else
-		static const double EPS;
-#endif
-		typedef std::vector<double, aligned_malloc_allocator<double>> dvector;
 
-		const std::uint32_t n_;
-		const bool avxSupported;
-		dvector x_;
-		dvector w_;
-		bool availableAVX() const;
-		void gauleg(bool usecilkoropenmp);
+        // #endregion 禁止されたコンストラクタ・メンバ関数
 
-	public:
-		explicit Gauss_Legendre(std::uint32_t n, bool usecilkoropenmp = false);
-		double qgauss(double x1, double x2, const std::function<double (double)> & func, bool useSSEorAVX) const;
 	};
 
 	inline bool Gauss_Legendre::availableAVX() const
@@ -55,10 +147,45 @@ namespace Gauss_Legendre {
 		return false;
 	}
 
-	inline Gauss_Legendre::Gauss_Legendre(std::uint32_t n, bool usecilkoropenmp)
-		:	n_(n), avxSupported(availableAVX()),
-			x_(n), w_(n)
-	{
-		gauleg(usecilkoropenmp);
-	}
+    template <typename FUNCTYPE>
+    double Gauss_Legendre::qgauss(const myfunctional::Function<FUNCTYPE> & func, bool usesimd, double x1, double x2) const
+    {
+        using boost::simd::pack;
+
+        const double xm = 0.5 * (x1 + x2);
+        const double xr = 0.5 * (x2 - x1);
+
+        double sum = 0.0;
+        if (usesimd && avxSupported) {
+            const std::uint32_t loop = n_ >> 2;
+            for (std::uint32_t i = 0; i < loop; i++) {
+                //auto tmp = boost::simd::pack<32>(xr);
+                const F64vec4 xi(F64vec4(_mm256_load_pd(&x_[(i << 2)]) * F64vec4(xr) + F64vec4(xm)));
+                sum += add_horizontal(F64vec4(_mm256_load_pd(&w_[(i << 2)]) *
+                    F64vec4(func(xi[3]), func(xi[2]), func(xi[1]), func(xi[0]))));
+            }
+
+            const std::uint32_t remainder = n_ & 0x03;
+            for (int i = n_ - remainder; i < n_; i++)
+                sum += w_[i] * func(xm + xr * x_[i]);
+        }
+        else if (usesimd) {
+            const std::uint32_t loop = n_ >> 1;
+            for (std::uint32_t i = 0; i < loop; i++) {
+                const F64vec2 xi(F64vec2(_mm_load_pd(&x_[(i << 1)]) * F64vec2(xr) + F64vec2(xm)));
+                sum += add_horizontal(F64vec2(_mm_load_pd(&w_[(i << 1)]) * F64vec2(func(xi[1]), func(xi[0]))));
+            }
+
+            if (n_ & 0x01)
+                sum += w_[n_ - 1] * func(xm + xr * x_[n_ - 1]);
+        }
+        else {
+            for (std::uint32_t i = 0; i < n_; i++) {
+                const double xi = xm + xr * x_[i];
+                sum += w_[i] * func(xi);
+            }
+        }
+        return sum * xr;
+    }
+
 }

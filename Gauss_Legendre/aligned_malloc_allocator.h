@@ -2,7 +2,7 @@
 #include <cstddef>
 #include <malloc.h>
 
-namespace Gauss_Legendre {
+namespace alignedmallocallocator {
 	template <typename T> class aligned_malloc_allocator {
 	public:
 		// typedefs
