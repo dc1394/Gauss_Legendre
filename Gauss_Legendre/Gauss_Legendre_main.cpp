@@ -1,4 +1,4 @@
-//#include "ChkPoint.h"
+ï»¿//#include "ChkPoint.h"
 #include "Gauss_Legendre.h"
 #include <array>
 #include <cmath>
@@ -39,7 +39,7 @@ int main()
 	std::array<double, 4> res;
 	std::array<std::string, 4> out;
 
-//	CheckPoint::ChkPoint chk("ˆ—ŠJn", __LINE__);
+//	CheckPoint::ChkPoint chk("å‡¦ç†é–‹å§‹", __LINE__);
 	
 	gausslegendre::Gauss_Legendre gl(N);
 	
@@ -50,7 +50,7 @@ int main()
 		
 		res[0] = sum;
 	}
-	out[0] = "AVX–³ŒøA" + str + "–³Œø";
+	out[0] = "AVXç„¡åŠ¹ã€" + str + "ç„¡åŠ¹";
 //	chk.checkpoint(out[0].c_str(), __LINE__);
 	
 	{
@@ -60,7 +60,7 @@ int main()
 		
 		res[1] = sum;
 	}
-	out[1] = "AVX—LŒøA" + str + "–³Œø";
+	out[1] = "AVXæœ‰åŠ¹ã€" + str + "ç„¡åŠ¹";
 //	chk.checkpoint(out[1].c_str(), __LINE__);
 //
 	{
@@ -80,7 +80,7 @@ int main()
 		res[2] = sum.get_value();
 #endif
 	}
-	out[2] = "AVX–³ŒøA" + str + "—LŒø";
+	out[2] = "AVXç„¡åŠ¹ã€" + str + "æœ‰åŠ¹";
 //	chk.checkpoint(out[2].c_str(), __LINE__);
 //
 	{
@@ -100,7 +100,7 @@ int main()
 		res[3] = sum.get_value();
 #endif
 	}
-	out[3] = "AVX—LŒøA" + str + "—LŒø";
+	out[3] = "AVXæœ‰åŠ¹ã€" + str + "æœ‰åŠ¹";
 //	chk.checkpoint(out[3].c_str(), __LINE__);
 //	
 //	chk.checkpoint_print();
@@ -108,11 +108,11 @@ int main()
 //	pgl = boost::none;
 
 	std::cout.setf(std::ios::fixed, std::ios::floatfield);
-	std::cout << "³Šm‚È’lF\t\t\t" << std::setprecision(DIGIT) << exact  << '\n';
-	std::cout << out[0] << "F\t" << std::setprecision(DIGIT) << res[0] << '\n';
-    std::cout << out[1] << "F\t" << std::setprecision(DIGIT) << res[1] << '\n';
-	std::cout << out[2] << "F\t" << std::setprecision(DIGIT) << res[2] << '\n';
-	std::cout << out[3] << "F\t" << std::setprecision(DIGIT) << res[3] << std::endl;
+	std::cout << "æ­£ç¢ºãªå€¤ï¼š\t\t\t" << std::setprecision(DIGIT) << exact  << '\n';
+	std::cout << out[0] << "ï¼š\t" << std::setprecision(DIGIT) << res[0] << '\n';
+    std::cout << out[1] << "ï¼š\t" << std::setprecision(DIGIT) << res[1] << '\n';
+	std::cout << out[2] << "ï¼š\t" << std::setprecision(DIGIT) << res[2] << '\n';
+	std::cout << out[3] << "ï¼š\t" << std::setprecision(DIGIT) << res[3] << std::endl;
 
 	return EXIT_SUCCESS;
 }

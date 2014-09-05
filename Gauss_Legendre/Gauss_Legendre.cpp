@@ -1,4 +1,4 @@
-#include "Gauss_Legendre.h"
+ï»¿#include "Gauss_Legendre.h"
 #include <stdexcept>
 #include <integration.h>
 
@@ -14,7 +14,7 @@ namespace gausslegendre {
             break;
 
         default:
-            throw std::runtime_error("alglib::gqgenerategausslegendre‚ª¸”s");
+            throw std::runtime_error("alglib::gqgenerategausslegendreãŒå¤±æ•—");
             break;
         }
 

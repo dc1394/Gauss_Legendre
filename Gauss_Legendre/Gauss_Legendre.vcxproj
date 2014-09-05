@@ -282,7 +282,6 @@
     <ClCompile Include="Gauss_Legendre_main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="aligned_malloc_allocator.h" />
     <ClInclude Include="functional.h" />
     <ClInclude Include="Gauss_Legendre.h" />
   </ItemGroup>
