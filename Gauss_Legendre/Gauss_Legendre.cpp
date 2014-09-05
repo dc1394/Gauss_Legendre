@@ -7,7 +7,8 @@ namespace gausslegendre {
         :	n_(n), avxSupported(availableAVX())
     {
         alglib::ae_int_t info = 0;
-        alglib::gqgenerategausslegendre(n, info, x_, w_);
+        alglib::real_1d_array x, w;
+        alglib::gqgenerategausslegendre(n, info, x, w);
         switch (info) {
         case 1:
             break;
@@ -16,6 +17,8 @@ namespace gausslegendre {
             throw std::runtime_error("alglib::gqgenerategausslegendre‚ªŽ¸”s");
             break;
         }
-        
+
+        x_.assign(x.getcontent(), x.getcontent() + x.length());
+        w_.assign(w.getcontent(), w.getcontent() + w.length());
     }
 }

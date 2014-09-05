@@ -5,18 +5,12 @@
 //-----------------------------------------------------------------------
 #pragma once
 
-#include "Function.h"
-#include <cstdint>
-#include <vector>
-//#include <intrin.h>
-#include <ap.h>
-#include <boost/simd/memory/allocator.hpp>
-//#include <dvec.h>
-#include <boost/simd/sdk/simd/native.hpp>
-//#include <boost/simd/include/functions/sum.hpp>
-//#include <boost/simd/include/functions/load.hpp>
-//#include <boost/simd/include/functions/plus.hpp>
-//#include <boost/simd/include/functions/multiplies.hpp>
+#include "functional.h"
+#include <cstdint>                          // for std::uint32_t
+#include <vector>                           // for std::vector
+#include <intrin.h>                         // for _xgetbv
+#include <boost/simd/memory/allocator.hpp>  // for boost::simd::allocator
+#include <dvec.h>                           // for F64vec4, F64vec2
 
 namespace gausslegendre {
     //! A class.
@@ -50,7 +44,7 @@ namespace gausslegendre {
         \return 積分値
         */
         template <typename FUNCTYPE>
-        double qgauss(const myfunctional::Function<FUNCTYPE> & func, bool usesimd, double x1, double x2) const;
+        double qgauss(const myfunctional::Functional<FUNCTYPE> & func, bool usesimd, double x1, double x2) const;
 
     private:
         //! A private member function.
@@ -78,27 +72,15 @@ namespace gausslegendre {
 
         //! A private member variable.
         /*!
-        Gauss-Legendreの重み（alignmentが揃ってない）
-        */
-        alglib::real_1d_array w_;
-
-        //! A private member variable.
-        /*!
         Gauss-Legendreの重み（alignmentが揃っている）
         */
-        std::vector<double, boost::simd::allocator<double, 32>> waligned_;
-
-        //! A private member variable.
-        /*!
-        Gauss-Legendreの節（alignmentが揃ってない）
-        */
-        alglib::real_1d_array x_;
+        std::vector<double, boost::simd::allocator<double, 64>> w_;
 
         //! A private member variable.
         /*!
         Gauss-Legendreの節（alignmentが揃っている）
         */
-        std::vector<double, boost::simd::allocator<double, 32>> xaligned_;
+        std::vector<double, boost::simd::allocator<double, 64>> x_;
         
         // #endregion メンバ変数
 
@@ -148,10 +130,8 @@ namespace gausslegendre {
 	}
 
     template <typename FUNCTYPE>
-    double Gauss_Legendre::qgauss(const myfunctional::Function<FUNCTYPE> & func, bool usesimd, double x1, double x2) const
+    double Gauss_Legendre::qgauss(const myfunctional::Functional<FUNCTYPE> & func, bool usesimd, double x1, double x2) const
     {
-        using boost::simd::pack;
-
         const double xm = 0.5 * (x1 + x2);
         const double xr = 0.5 * (x2 - x1);
 
@@ -159,7 +139,6 @@ namespace gausslegendre {
         if (usesimd && avxSupported) {
             const std::uint32_t loop = n_ >> 2;
             for (std::uint32_t i = 0; i < loop; i++) {
-                //auto tmp = boost::simd::pack<32>(xr);
                 const F64vec4 xi(F64vec4(_mm256_load_pd(&x_[(i << 2)]) * F64vec4(xr) + F64vec4(xm)));
                 sum += add_horizontal(F64vec4(_mm256_load_pd(&w_[(i << 2)]) *
                     F64vec4(func(xi[3]), func(xi[2]), func(xi[1]), func(xi[0]))));
@@ -187,5 +166,4 @@ namespace gausslegendre {
         }
         return sum * xr;
     }
-
 }

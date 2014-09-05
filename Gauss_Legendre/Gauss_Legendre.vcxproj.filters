@@ -29,7 +29,7 @@
     <ClInclude Include="aligned_malloc_allocator.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Function.h">
+    <ClInclude Include="functional.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

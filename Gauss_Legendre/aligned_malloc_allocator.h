@@ -1,8 +1,13 @@
-#include <limits>
 #include <cstddef>
-#include <malloc.h>
+#include <limits>
+#include <boost/static_assert.hpp>
+#ifdef _MSC_VER
+    #include <malloc.h>
+#else
+    BOOST_STATIC_ASSERT(false)
+#endif
 
-namespace alignedmallocallocator {
+namespace myallocator {
 	template <typename T> class aligned_malloc_allocator {
 	public:
 		// typedefs

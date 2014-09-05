@@ -11,7 +11,7 @@ namespace myfunctional {
     std::function<double (double)>の代わりになるtemplate class
     */
     template <typename FUNCTYPE>
-    class Function final
+    class Functional final
     {
         //! A private const variable.
         /*!
@@ -24,7 +24,7 @@ namespace myfunctional {
         /*!
         operator()で呼び出す関数
         */
-        Function(const FUNCTYPE & func) : func_(func) {}
+        Functional(const FUNCTYPE & func) : func_(func) {}
         
         //! A public member function.
         /*!
@@ -46,8 +46,8 @@ namespace myfunctional {
     \return 生成されたFunction<FUNCTYPE>
     */
     template <class FUNCTYPE>
-    Function<FUNCTYPE> make_function(const FUNCTYPE & func)
+    Functional<FUNCTYPE> make_functional(const FUNCTYPE & func)
     {
-        return Function<FUNCTYPE>(func);
+        return Functional<FUNCTYPE>(func);
     }
 }
