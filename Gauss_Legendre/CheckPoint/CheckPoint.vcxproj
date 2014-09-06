@@ -164,11 +164,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ArraiedAllocator.h" />
-    <ClInclude Include="ChkPoint.h" />
+    <ClInclude Include="CheckPoint.h" />
     <ClInclude Include="FastArenaObject.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ChkPoint.cpp" />
+    <ClCompile Include="CheckPoint.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

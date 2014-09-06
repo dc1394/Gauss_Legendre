@@ -1,4 +1,4 @@
-﻿//#include "ChkPoint.h"
+﻿//#include "CheckPoint.h"
 #include "Gauss_Legendre.h"
 #include <array>
 #include <cmath>
@@ -39,7 +39,7 @@ int main()
 	std::array<double, 4> res;
 	std::array<std::string, 4> out;
 
-//	CheckPoint::ChkPoint chk("処理開始", __LINE__);
+//	CheckPoint::CheckPoint chk("処理開始", __LINE__);
 	
 	gausslegendre::Gauss_Legendre gl(N);
 	

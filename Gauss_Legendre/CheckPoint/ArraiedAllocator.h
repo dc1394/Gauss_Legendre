@@ -1,17 +1,13 @@
-#ifndef _ARRAYIED_ALLOCATOR_H_
-#define _ARRAYIED_ALLOCATOR_H_
+#ifndef _ARRAYIEDALLOCATOR_H_
+#define _ARRAYIEDALLOCATOR_H_
+
+#pragma once
 
 #include <boost/static_assert.hpp>
-#if !defined(__INTEL_COMPILER) && !defined(__GXX_EXPERIMENTAL_CXX0X__)
-	#include <boost/noncopyable.hpp>
-#endif
 
-namespace CheckPoint {
+namespace checkpoint {
 	template <std::size_t TTypeSize, std::size_t TNumArray>
-	class ArraiedAllocator
-#if !defined(__INTEL_COMPILER) && !defined(__GXX_EXPERIMENTAL_CXX0X__)
-		: private boost::noncopyable
-#endif
+	class ArraiedAllocator final
 	{
 #if defined(__INTEL_COMPILER) || defined(__GXX_EXPERIMENTAL_CXX0X__)
 		ArraiedAllocator(const ArraiedAllocator &) = delete;
@@ -71,5 +67,4 @@ namespace CheckPoint {
 	}
 }
 
-#endif // _ARRAYIED_ALLOCATOR_H_
-// EOF
+#endif // _ARRAYIEDALLOCATOR_H_

@@ -13,22 +13,22 @@ namespace myfunctional {
     template <typename FUNCTYPE>
     class Functional final
     {
-        //! A private const variable.
-        /*!
-        operator()で呼び出す関数
-        */
-        const FUNCTYPE & func_;
-
     public:
+        // #region コンストラクタ
+
         //! A constructor.
         /*!
-        operator()で呼び出す関数
+        \param func operator()で呼び出す関数
         */
         Functional(const FUNCTYPE & func) : func_(func) {}
-        
+
+        // #endregion コンストラクタ
+
+        // #region メンバ関数
+
         //! A public member function.
         /*!
-        operator()の宣言
+        operator()の宣言と実装
         関数f(x)の値を返す
         \param x xの値
         \return f(x)の値
@@ -37,6 +37,19 @@ namespace myfunctional {
         {
             return func_(x);
         }
+
+        // #endregion メンバ関数
+
+    private:
+        // #region メンバ変数
+        
+        //! A private const variable (reference).
+        /*!
+        operator()で呼び出す関数
+        */
+        const FUNCTYPE & func_;
+
+        // #endregion メンバ変数
     };
 
     //! A template function（非メンバ関数）.

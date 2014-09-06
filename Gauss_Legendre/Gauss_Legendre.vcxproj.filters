@@ -26,7 +26,7 @@
     <ClInclude Include="Gauss_Legendre.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="functional.h">
+    <ClInclude Include="Functional.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

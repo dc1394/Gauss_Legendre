@@ -100,7 +100,7 @@ namespace gausslegendre {
 
         //! operator=() (deleted).
         /*!
-        デフォルトコンストラクタ（禁止）
+        operator=()の宣言（禁止）
         \param コピー元のオブジェクト
         \return コピー元のオブジェクト
         */

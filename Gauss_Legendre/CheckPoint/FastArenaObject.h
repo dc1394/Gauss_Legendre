@@ -1,14 +1,13 @@
-#ifndef _FAST_ARENA_OBJECT_H_
-#define _FAST_ARENA_OBJECT_H_
+#ifndef _FASTARENAOBJECT_H_
+#define _FASTARENAOBJECT_H_
+
+#pragma once
 
 #include "ArraiedAllocator.h"
 
-namespace CheckPoint {
+namespace checkpoint {
 	template <size_t TTypeSize, size_t TNumArray = 1>
-	struct FastArenaObject
-#if !defined(__INTEL_COMPILER) && !defined(__GXX_EXPERIMENTAL_CXX0X__)
-		: private boost::noncopyable
-#endif
+	struct FastArenaObject final
 	{
 #if defined(__INTEL_COMPILER) || defined(__GXX_EXPERIMENTAL_CXX0X__)
 		FastArenaObject(const FastArenaObject &) = delete;
@@ -27,5 +26,4 @@ namespace CheckPoint {
 	};
 }
 
-#endif // _FAST_ARENA_OBJECT_H_
-// EOF
+#endif // _FASTARENAOBJECT_H_

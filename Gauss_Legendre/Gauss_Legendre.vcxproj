@@ -282,7 +282,7 @@
     <ClCompile Include="Gauss_Legendre_main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="functional.h" />
+    <ClInclude Include="Functional.h" />
     <ClInclude Include="Gauss_Legendre.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
