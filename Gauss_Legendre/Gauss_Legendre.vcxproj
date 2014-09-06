@@ -108,7 +108,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\mylib64\alglib-3.8.2.cpp\cpp\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Intel_SSA|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -226,18 +225,19 @@
       <FlushDenormalResultsToZero>true</FlushDenormalResultsToZero>
       <LoopUnrolling>3</LoopUnrolling>
       <Cpp0xSupport>true</Cpp0xSupport>
-      <AdditionalIncludeDirectories>D:\DATA\PROGRAM\C++\Gauss_Legendre\CheckPoint;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\DATA\PROGRAM\C++\Gauss_Legendre\Gauss_Legendre\CheckPoint;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OpenMPSupport>true</OpenMPSupport>
       <GenerateAlternateCodePaths>AVX</GenerateAlternateCodePaths>
       <UseProcessorExtensions>AVX</UseProcessorExtensions>
       <Optimization>MaxSpeedHighLevel</Optimization>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>alglib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>CheckPoint.lib;alglib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>D:\DATA\PROGRAM\C++\Gauss_Legendre\x64\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/LTCG %(AdditionalOptions)</AdditionalOptions>
     </Link>

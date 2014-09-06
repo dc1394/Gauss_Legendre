@@ -1,7 +1,8 @@
-﻿//#include "CheckPoint.h"
+﻿#include "CheckPoint.h"
 #include "Gauss_Legendre.h"
 #include <array>
 #include <cmath>
+#include <cstdio>
 #include <iomanip>
 #include <iostream>
 #include <string>
@@ -19,30 +20,34 @@
 #endif
 
 namespace {
-		static const std::uint32_t N = 10000;
-		static const std::int32_t LOOPMAX = 10000;
-		static const std::uint32_t DIGIT = 10;
-		static const double z = 1.0;
-		static const double a = 2.0 / std::sqrt(boost::math::constants::pi<double>());
+		static auto constexpr N = 10000;
+		static auto constexpr LOOPMAX = 500;
+		static auto constexpr DIGIT = 10;
+		static auto constexpr z = 1.0;
+		static auto const a = 2.0 / std::sqrt(boost::math::constants::pi<double>());
 
 #ifdef _OPENMP
-		static const std::string str("OpenMP");
+		static std::string const str("OpenMP");
 #else
-		static const std::string str("Intel Cilk Plus");
+		static std::string const str("Intel Cilk Plus");
 #endif
 	}
 
 int main()
 {
-    const auto func = myfunctional::make_functional([](double x) { return a * exp(-x * x); });
-	const auto exact = boost::math::erf(z) * static_cast<double>(LOOPMAX);
+    auto const func = myfunctional::make_functional([](double x) { return a * exp(-x * x); });
+	auto const exact = boost::math::erf(z) * static_cast<double>(LOOPMAX);
 	std::array<double, 4> res;
 	std::array<std::string, 4> out;
 
-//	CheckPoint::CheckPoint chk("処理開始", __LINE__);
+    checkpoint::CheckPoint chk;
+    
+    chk.checkpoint("処理開始", __LINE__);
 	
 	gausslegendre::Gauss_Legendre gl(N);
 	
+    chk.checkpoint("Gauss-Legendreの分点を求める処理", __LINE__);
+
 	{
 		double sum = 0.0;
 		for (std::int32_t i = 0; i < LOOPMAX; i++)
@@ -51,7 +56,7 @@ int main()
 		res[0] = sum;
 	}
 	out[0] = "AVX無効、" + str + "無効";
-//	chk.checkpoint(out[0].c_str(), __LINE__);
+	chk.checkpoint(out[0].c_str(), __LINE__);
 	
 	{
 		double sum = 0.0;
@@ -61,8 +66,8 @@ int main()
 		res[1] = sum;
 	}
 	out[1] = "AVX有効、" + str + "無効";
-//	chk.checkpoint(out[1].c_str(), __LINE__);
-//
+	chk.checkpoint(out[1].c_str(), __LINE__);
+
 	{
 #ifdef _OPENMP
 		double sum = 0.0;
@@ -81,8 +86,8 @@ int main()
 #endif
 	}
 	out[2] = "AVX無効、" + str + "有効";
-//	chk.checkpoint(out[2].c_str(), __LINE__);
-//
+	chk.checkpoint(out[2].c_str(), __LINE__);
+
 	{
 #ifdef _OPENMP
 		double sum = 0.0;
@@ -101,11 +106,9 @@ int main()
 #endif
 	}
 	out[3] = "AVX有効、" + str + "有効";
-//	chk.checkpoint(out[3].c_str(), __LINE__);
-//	
-//	chk.checkpoint_print();
-//
-//	pgl = boost::none;
+	chk.checkpoint(out[3].c_str(), __LINE__);
+	
+	chk.checkpoint_print();
 
 	std::cout.setf(std::ios::fixed, std::ios::floatfield);
 	std::cout << "正確な値：\t\t\t" << std::setprecision(DIGIT) << exact  << '\n';

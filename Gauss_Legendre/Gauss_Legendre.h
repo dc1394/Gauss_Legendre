@@ -1,12 +1,13 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Function.h" company="dc1394's software">
+// <copyright file="Gauss_Legendre.h" company="dc1394's software">
 //     Copyright ©  2014 @dc1394 All Rights Reserved.
 // </copyright>
 //-----------------------------------------------------------------------
 #pragma once
 
-#include "functional.h"
-#include <cstdint>                          // for std::uint32_t
+#include "Functional.h"
+#include <array>                            // for std::array
+#include <cstdint>                          // for std::int32_t
 #include <vector>                           // for std::vector
 #include <intrin.h>                         // for _xgetbv
 #include <boost/simd/memory/allocator.hpp>  // for boost::simd::allocator
@@ -113,16 +114,16 @@ namespace gausslegendre {
 	inline bool Gauss_Legendre::availableAVX() const
 	{
 #if (_MSC_FULL_VER >= 160040219)
-		int cpuInfo[4];
-		__cpuid(cpuInfo, 1);
+        std::array<std::int32_t, 4> cpuInfo = { 0 };
+		::__cpuid(cpuInfo.data(), 1);
  			
-		const bool osUsesXSAVE_XRSTORE = cpuInfo[2] & (1 << 27) || false;
-		const bool cpuAVXSuport = cpuInfo[2] & (1 << 28) || false;
+		const auto osUsesXSAVE_XRSTORE = cpuInfo[2] & (1 << 27) || false;
+		const auto cpuAVXSuport = cpuInfo[2] & (1 << 28) || false;
  
 		if (osUsesXSAVE_XRSTORE && cpuAVXSuport)
 		{
 			// Check if the OS will save the YMM registers
-			const std::uint64_t xcrFeatureMask = _xgetbv(_XCR_XFEATURE_ENABLED_MASK);
+			const auto xcrFeatureMask = _xgetbv(_XCR_XFEATURE_ENABLED_MASK);
 			return (xcrFeatureMask & 0x6) || false;
 		}
 #endif
@@ -132,27 +133,27 @@ namespace gausslegendre {
     template <typename FUNCTYPE>
     double Gauss_Legendre::qgauss(const myfunctional::Functional<FUNCTYPE> & func, bool usesimd, double x1, double x2) const
     {
-        const double xm = 0.5 * (x1 + x2);
-        const double xr = 0.5 * (x2 - x1);
+        auto const xm = 0.5 * (x1 + x2);
+        auto const xr = 0.5 * (x2 - x1);
 
-        double sum = 0.0;
+        auto sum = 0.0;
         if (usesimd && avxSupported) {
-            const std::uint32_t loop = n_ >> 2;
+            auto const loop = n_ >> 2;
             for (std::uint32_t i = 0; i < loop; i++) {
-                const F64vec4 xi(F64vec4(_mm256_load_pd(&x_[(i << 2)]) * F64vec4(xr) + F64vec4(xm)));
-                sum += add_horizontal(F64vec4(_mm256_load_pd(&w_[(i << 2)]) *
+                auto const xi(F64vec4(::_mm256_load_pd(&x_[(i << 2)]) * F64vec4(xr) + F64vec4(xm)));
+                sum += add_horizontal(F64vec4(::_mm256_load_pd(&w_[(i << 2)]) *
                     F64vec4(func(xi[3]), func(xi[2]), func(xi[1]), func(xi[0]))));
             }
 
-            const std::uint32_t remainder = n_ & 0x03;
-            for (int i = n_ - remainder; i < n_; i++)
+            auto const remainder = n_ & 0x03;
+            for (std::uint32_t i = n_ - remainder; i < n_; i++)
                 sum += w_[i] * func(xm + xr * x_[i]);
         }
         else if (usesimd) {
-            const std::uint32_t loop = n_ >> 1;
+            auto const loop = n_ >> 1;
             for (std::uint32_t i = 0; i < loop; i++) {
-                const F64vec2 xi(F64vec2(_mm_load_pd(&x_[(i << 1)]) * F64vec2(xr) + F64vec2(xm)));
-                sum += add_horizontal(F64vec2(_mm_load_pd(&w_[(i << 1)]) * F64vec2(func(xi[1]), func(xi[0]))));
+                auto const xi(F64vec2(::_mm_load_pd(&x_[(i << 1)]) * F64vec2(xr) + F64vec2(xm)));
+                sum += add_horizontal(F64vec2(::_mm_load_pd(&w_[(i << 1)]) * F64vec2(func(xi[1]), func(xi[0]))));
             }
 
             if (n_ & 0x01)
@@ -160,10 +161,11 @@ namespace gausslegendre {
         }
         else {
             for (std::uint32_t i = 0; i < n_; i++) {
-                const double xi = xm + xr * x_[i];
+                auto const xi = xm + xr * x_[i];
                 sum += w_[i] * func(xi);
             }
         }
+
         return sum * xr;
     }
 }

@@ -4,7 +4,7 @@
 
 namespace gausslegendre {
     Gauss_Legendre::Gauss_Legendre(std::uint32_t n)
-        :	n_(n), avxSupported(availableAVX())
+        : avxSupported(availableAVX()), n_(n)
     {
         alglib::ae_int_t info = 0;
         alglib::real_1d_array x, w;
