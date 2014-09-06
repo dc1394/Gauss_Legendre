@@ -1,8 +1,11 @@
-﻿//-----------------------------------------------------------------------
-// <copyright file="Gauss_Legendre.h" company="dc1394's software">
-//     Copyright ©  2014 @dc1394 All Rights Reserved.
-// </copyright>
-//-----------------------------------------------------------------------
+﻿/*! \file Gauss_Legendre.h
+    \brief A Header file.
+
+    Copyright ©  2014 @dc1394 All Rights Reserved.
+*/
+#ifndef _GAUSS_LEGENDRE_H_
+#define _GAUSS_LEGENDRE_H_
+
 #pragma once
 
 #include "Functional.h"
@@ -59,13 +62,13 @@ namespace gausslegendre {
 
         // #region メンバ変数
 
-        //! A private member variable (const).
+        //! A private member variable (constant).
         /*!
         AVX命令が使用可能かどうか
         */
         const bool avxSupported;
 
-        //! A private member variable (const).
+        //! A private member variable (constant).
         /*!
         Gauss-Legendreの分点
         */
@@ -99,7 +102,7 @@ namespace gausslegendre {
         */
 		Gauss_Legendre(const Gauss_Legendre &) = delete;
 
-        //! operator=() (deleted).
+        //! A private member function (deleted).
         /*!
         operator=()の宣言（禁止）
         \param コピー元のオブジェクト
@@ -108,7 +111,6 @@ namespace gausslegendre {
 		Gauss_Legendre & operator=(const Gauss_Legendre &) = delete;
 
         // #endregion 禁止されたコンストラクタ・メンバ関数
-
 	};
 
 	inline bool Gauss_Legendre::availableAVX() const
@@ -169,3 +171,5 @@ namespace gausslegendre {
         return sum * xr;
     }
 }
+
+#endif  // _GAUSS_LEGENDRE_H_

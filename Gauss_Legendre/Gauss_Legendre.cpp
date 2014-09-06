@@ -1,4 +1,9 @@
-﻿#include "Gauss_Legendre.h"
+﻿/*! \file Gauss_Legendre.cpp
+    \brief A C++ file.
+
+    Copyright ©  2014 @dc1394 All Rights Reserved.
+*/
+#include "Gauss_Legendre.h"
 #include <stdexcept>
 #include <integration.h>
 

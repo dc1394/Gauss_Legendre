@@ -139,15 +139,15 @@ namespace checkpoint {
         // #endregion 禁止されたコンストラクタ・メンバ関数
 	};
 
+    template <std::size_t TTypeSize, std::size_t TNumArray>
+    ArraiedAllocator<TTypeSize, TNumArray> ArraiedAllocator<TTypeSize, TNumArray>::allocator_;
+
+    template <std::size_t TTypeSize, std::size_t TNumArray>
+    typename ArraiedAllocator<TTypeSize, TNumArray>::Item* ArraiedAllocator<TTypeSize, TNumArray>::first_;
+
 	template <std::size_t TTypeSize, std::size_t TNumArray>
 	typename ArraiedAllocator<TTypeSize,TNumArray>::Item
 		ArraiedAllocator<TTypeSize, TNumArray>::items_[ArraiedAllocator<TTypeSize,TNumArray>::MAX_SIZE];
-
-	template <std::size_t TTypeSize, std::size_t TNumArray>
-	typename ArraiedAllocator<TTypeSize, TNumArray>::Item* ArraiedAllocator<TTypeSize,TNumArray>::first_;
-
-	template <std::size_t TTypeSize, std::size_t TNumArray>
-	ArraiedAllocator<TTypeSize, TNumArray> ArraiedAllocator<TTypeSize,TNumArray>::allocator_;
 
 	template <std::size_t TTypeSize, std::size_t TNumArray>
 	inline ArraiedAllocator<TTypeSize, TNumArray>::ArraiedAllocator() {

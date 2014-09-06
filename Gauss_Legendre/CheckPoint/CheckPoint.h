@@ -3,7 +3,6 @@
 
     Copyright ©  2014 @dc1394 All Rights Reserved.
 */
-
 #ifndef _CHECKPOINT_H_
 #define _CHECKPOINT_H_
 
