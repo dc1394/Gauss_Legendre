@@ -1,14 +1,17 @@
-﻿//-----------------------------------------------------------------------
-// <copyright file="Function.h" company="dc1394's software">
-//     Copyright ©  2014 @dc1394 All Rights Reserved.
-// </copyright>
-//-----------------------------------------------------------------------
+﻿/*! \file Functional.h
+    \brief std::function<double (double)>の代わりになるクラス
+
+    Copyright ©  2014 @dc1394 All Rights Reserved.
+*/
+#ifndef _FUNCTONAL_H_
+#define _FUNCTONAL_H_
+
 #pragma once
 
 namespace myfunctional {
     //! A template class.
     /*!
-    std::function<double (double)>の代わりになるtemplate class
+        std::function<double (double)>の代わりになるtemplate class
     */
     template <typename FUNCTYPE>
     class Functional final
@@ -28,10 +31,10 @@ namespace myfunctional {
 
         //! A public member function.
         /*!
-        operator()の宣言と実装
-        関数f(x)の値を返す
-        \param x xの値
-        \return f(x)の値
+            operator()の宣言と実装
+            関数f(x)の値を返す
+            \param x xの値
+            \return f(x)の値
         */
         double operator()(double x) const
         {
@@ -45,7 +48,7 @@ namespace myfunctional {
         
         //! A private const variable (reference).
         /*!
-        operator()で呼び出す関数
+            operator()で呼び出す関数
         */
         const FUNCTYPE & func_;
 
@@ -54,9 +57,9 @@ namespace myfunctional {
 
     //! A template function（非メンバ関数）.
     /*!
-    Function<FUNCTYPE>を生成する
-    \param func 格納する関数
-    \return 生成されたFunction<FUNCTYPE>
+        Function<FUNCTYPE>を生成する
+        \param func 格納する関数
+        \return 生成されたFunction<FUNCTYPE>
     */
     template <class FUNCTYPE>
     Functional<FUNCTYPE> make_functional(const FUNCTYPE & func)
@@ -64,3 +67,5 @@ namespace myfunctional {
         return Functional<FUNCTYPE>(func);
     }
 }
+
+#endif  // _FUNCTIONAL_H_

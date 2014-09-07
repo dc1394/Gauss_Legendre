@@ -1,5 +1,5 @@
 ﻿/*! \file CheckPoint.h
-    \brief A Header file.
+    \brief 時間計測のためのクラスの宣言
 
     Copyright ©  2014 @dc1394 All Rights Reserved.
 */
@@ -15,7 +15,7 @@
 namespace checkpoint {
     //! A class.
     /*!
-    時間計測のためのクラス
+        時間計測のためのクラス
     */
 	class CheckPoint final
 	{
@@ -30,7 +30,7 @@ namespace checkpoint {
 
         template <typename T>
         struct fastpimpl_deleter {
-            void operator()(T * const p) const {
+            void operator()(T * p) const {
                 FastArenaObject<sizeof(CheckPointFastImpl)>::
                     operator delete(reinterpret_cast<void *>(p));
             }
@@ -43,7 +43,7 @@ namespace checkpoint {
 
         //! A constructor.
         /*!
-        デフォルトコンストラクタかつ唯一のコンストラクタ
+            デフォルトコンストラクタかつ唯一のコンストラクタ
         */
         CheckPoint();
 
@@ -58,23 +58,23 @@ namespace checkpoint {
 
         //! A public member function.
         /*!
-        チェックポイントを設定する
-        \param line 行数
-        \param action チェックポイントの名称
+            チェックポイントを設定する
+            \param line 行数
+            \param action チェックポイントの名称
         */
         void checkpoint(char const * action, std::int32_t line);
 
         //! A public member function.
         /*!
-        直前のチェックポイントから計測した、経過時間を表示する
+            直前のチェックポイントから計測した、経過時間を表示する
         */
         void checkpoint_print() const;
 
         //! A public member function.
         /*!
-        最初のチェックポイントから最後のチェックポイント
-        までの経過時間を返す
-        \return 経過時間
+            最初のチェックポイントから最後のチェックポイント
+            までの経過時間を返す
+            \return 経過時間
         */
         double totalpassageoftime() const;
 
@@ -85,7 +85,7 @@ namespace checkpoint {
 
         //! A private member variable (constant).
         /*!
-        チェックポイントの状態へのスマートポインタ
+            チェックポイントの状態へのスマートポインタ
         */
         const std::unique_ptr<CheckPointFastImpl, fastpimpl_deleter<CheckPointFastImpl>> cfp;
 
@@ -95,17 +95,17 @@ namespace checkpoint {
 
         //! A private copy constructor (deleted).
         /*!
-        コピーコンストラクタ（禁止）
+            コピーコンストラクタ（禁止）
         */
-		CheckPoint(const CheckPoint &) = delete;
+		CheckPoint(CheckPoint const &) = delete;
 
         //! operator=() (deleted).
         /*!
-        operator=()の宣言（禁止）
-        \param コピー元のオブジェクト
-        \return コピー元のオブジェクト
+            operator=()の宣言（禁止）
+            \param コピー元のオブジェクト
+            \return コピー元のオブジェクト
         */
-		CheckPoint & operator=(const CheckPoint &) = delete;
+		CheckPoint & operator=(CheckPoint const &) = delete;
 
         // #endregion 禁止されたコンストラクタ・メンバ関数
 	};

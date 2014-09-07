@@ -1,5 +1,5 @@
 ﻿/*! \file ArraiedAllocator.h
-    \brief A Header file.
+    \brief 固定サイズのメモリを確保するアロケータークラス
 
     Copyright ©  2014 @dc1394 All Rights Reserved.
 */
@@ -14,9 +14,9 @@
 namespace checkpoint {
     //! A template class.
     /*!
-    固定サイズのメモリを確保するアロケータークラス
-    \param TTypeSize 収納する型のサイズ
-    \param TnumArray 収納する要素の数
+        固定サイズのメモリを確保するアロケータークラス
+        \param TTypeSize 収納する型のサイズ
+        \param TnumArray 収納する要素の数
     */
 	template <std::size_t TTypeSize, std::size_t TNumArray>
 	class ArraiedAllocator final
@@ -43,7 +43,7 @@ namespace checkpoint {
 
         //! A constructor.
         /*!
-        デフォルトコンストラクタかつ唯一のコンストラクタ
+            デフォルトコンストラクタかつ唯一のコンストラクタ
         */
 		ArraiedAllocator();
         
@@ -58,8 +58,8 @@ namespace checkpoint {
 
         //! A public static member function.
         /*!
-        メモリを確保してそのアドレスを返す
-        \return 確保されたメモリのアドレス
+            メモリを確保してそのアドレスを返す
+            \return 確保されたメモリのアドレス
         */
         static void * Alloc() {
 			Item * ret = first_;
@@ -69,8 +69,8 @@ namespace checkpoint {
 
         //! A public static member function.
         /*!
-        確保されたメモリを解放する
-        \param item 解放するメモリのアドレス
+            確保されたメモリを解放する
+            \param item 解放するメモリのアドレス
         */
 		static void Free(void * item) {
 			Item * rev = reinterpret_cast<Item *>(item);
@@ -80,16 +80,16 @@ namespace checkpoint {
 
         //! A public static member function.
         /*!
-        アロケーターを返す
-        \return アロケーター
+            アロケーターを返す
+            \return アロケーター
         */
 		static ArraiedAllocator& GetAllocator() { return allocator_; }
 		
 
         //! A public static member function.
         /*!
-        格納できる最大の要素数を返す
-        \return 収納できる最大の要素数
+            格納できる最大の要素数を返す
+            \return 収納できる最大の要素数
         */
         static std::size_t Max() { return MAX_SIZE; }
 
@@ -98,25 +98,25 @@ namespace checkpoint {
 
         //! A private static member variable (constant expression).
         /*!
-        格納できる最大の要素数
+            格納できる最大の要素数
         */
         static const std::size_t MAX_SIZE = TNumArray;
 
         //! A private static member variable.
         /*!
-        アロケーター
+            アロケーター
         */
         static ArraiedAllocator allocator_;
 
         //! A private static member variable.
         /*!
-        最初の要素へのポインタ        
+            最初の要素へのポインタ        
         */
         static Item * first_;
         
         //! A private static member variable.
         /*!
-        要素の配列
+            要素の配列
         */
         static Item items_[MAX_SIZE];
 
@@ -124,20 +124,29 @@ namespace checkpoint {
 
         //! A private copy constructor (deleted).
         /*!
-        コピーコンストラクタ（禁止）
+            コピーコンストラクタ（禁止）
         */
-        ArraiedAllocator(const ArraiedAllocator &) = delete;
+        ArraiedAllocator(ArraiedAllocator const &) = delete;
 
         //! A private member function (deleted).
         /*!
-        operator=()の宣言（禁止）
-        \param コピー元のオブジェクト（未使用）
-        \return コピー元のオブジェクト（未使用）
+            operator=()の宣言（禁止）
+            \param コピー元のオブジェクト（未使用）
+            \return コピー元のオブジェクト（未使用）
         */
-        ArraiedAllocator & operator=(const ArraiedAllocator &) = delete;
+        ArraiedAllocator & operator=(ArraiedAllocator const &) = delete;
 
         // #endregion 禁止されたコンストラクタ・メンバ関数
 	};
+
+    template <std::size_t TTypeSize, std::size_t TNumArray>
+    inline ArraiedAllocator<TTypeSize, TNumArray>::ArraiedAllocator() {
+        first_ = &items_[0];
+        for (int i = 0; i < TNumArray; i++) {
+            items_[i].next_ = &items_[i + 1];
+        }
+        items_[TNumArray - 1].next_ = nullptr;
+    }
 
     template <std::size_t TTypeSize, std::size_t TNumArray>
     ArraiedAllocator<TTypeSize, TNumArray> ArraiedAllocator<TTypeSize, TNumArray>::allocator_;
@@ -148,15 +157,6 @@ namespace checkpoint {
 	template <std::size_t TTypeSize, std::size_t TNumArray>
 	typename ArraiedAllocator<TTypeSize,TNumArray>::Item
 		ArraiedAllocator<TTypeSize, TNumArray>::items_[ArraiedAllocator<TTypeSize,TNumArray>::MAX_SIZE];
-
-	template <std::size_t TTypeSize, std::size_t TNumArray>
-	inline ArraiedAllocator<TTypeSize, TNumArray>::ArraiedAllocator() {
-		first_ = &items_[0];
-		for (int i = 0; i < TNumArray; i++) {
-			items_[i].next_ = &items_[i + 1];
-		}
-		items_[TNumArray - 1].next_ = nullptr;
-	}
 }
 
 #endif // _ARRAYIEDALLOCATOR_H_

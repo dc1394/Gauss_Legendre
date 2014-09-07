@@ -1,5 +1,5 @@
 ﻿/*! \file Gauss_Legendre.cpp
-    \brief A C++ file.
+    \brief Gauss-Legendre積分を行うクラスの実装
 
     Copyright ©  2014 @dc1394 All Rights Reserved.
 */

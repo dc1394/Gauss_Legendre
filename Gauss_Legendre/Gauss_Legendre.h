@@ -1,5 +1,5 @@
 ﻿/*! \file Gauss_Legendre.h
-    \brief A Header file.
+    \brief Gauss-Legendre積分を行うクラスの宣言
 
     Copyright ©  2014 @dc1394 All Rights Reserved.
 */
@@ -19,7 +19,7 @@
 namespace gausslegendre {
     //! A class.
     /*!
-    Gauss-Legendre積分を行うクラス
+        Gauss-Legendre積分を行うクラス
     */
 	class Gauss_Legendre final
 	{
@@ -28,9 +28,9 @@ namespace gausslegendre {
 
         //! A constructor.
         /*!
-        唯一のコンストラクタ
-        Gauss-Legendreの重みと節を計算して、それぞれw_とx_に格納する
-        \param n Gauss-Legendreの分点
+            唯一のコンストラクタ
+            Gauss-Legendreの重みと節を計算して、それぞれw_とx_に格納する
+            \param n Gauss-Legendreの分点
         */
         explicit Gauss_Legendre(std::uint32_t n);
 
@@ -40,21 +40,21 @@ namespace gausslegendre {
 
         //! A public member function (template function).
         /*!
-        Gauss-Legendre積分を実行する
-        \param func 被積分関数
-        \param usesimd SIMDを使用するかどうか
-        \param x1 積分の下端
-        \param x2 積分の上端
-        \return 積分値
+            Gauss-Legendre積分を実行する
+            \param func 被積分関数
+            \param usesimd SIMDを使用するかどうか
+            \param x1 積分の下端
+            \param x2 積分の上端
+            \return 積分値
         */
         template <typename FUNCTYPE>
-        double qgauss(const myfunctional::Functional<FUNCTYPE> & func, bool usesimd, double x1, double x2) const;
+        double qgauss(myfunctional::Functional<FUNCTYPE> const & func, bool usesimd, double x1, double x2) const;
 
     private:
         //! A private member function.
         /*!
-        AVX命令が使用可能かどうかをチェックする
-        \return AVX命令が使用可能ならtrue、使用不可能ならfalse
+            AVX命令が使用可能かどうかをチェックする
+            \return AVX命令が使用可能ならtrue、使用不可能ならfalse
         */
         bool availableAVX() const;
 
@@ -64,13 +64,13 @@ namespace gausslegendre {
 
         //! A private member variable (constant).
         /*!
-        AVX命令が使用可能かどうか
+            AVX命令が使用可能かどうか
         */
         const bool avxSupported;
 
         //! A private member variable (constant).
         /*!
-        Gauss-Legendreの分点
+            Gauss-Legendreの分点
         */
         const std::uint32_t n_;
 
@@ -82,7 +82,7 @@ namespace gausslegendre {
 
         //! A private member variable.
         /*!
-        Gauss-Legendreの節（alignmentが揃っている）
+            Gauss-Legendreの節（alignmentが揃っている）
         */
         std::vector<double, boost::simd::allocator<double, 64>> x_;
         
@@ -92,23 +92,23 @@ namespace gausslegendre {
 
         //! A private constructor (deleted).
         /*!
-        デフォルトコンストラクタ（禁止）
+            デフォルトコンストラクタ（禁止）
         */
         Gauss_Legendre() = delete;
 
         //! A private copy constructor (deleted).
         /*!
-        コピーコンストラクタ（禁止）
+            コピーコンストラクタ（禁止）
         */
-		Gauss_Legendre(const Gauss_Legendre &) = delete;
+		Gauss_Legendre(Gauss_Legendre const &) = delete;
 
         //! A private member function (deleted).
         /*!
-        operator=()の宣言（禁止）
-        \param コピー元のオブジェクト
-        \return コピー元のオブジェクト
+            operator=()の宣言（禁止）
+            \param コピー元のオブジェクト
+            \return コピー元のオブジェクト
         */
-		Gauss_Legendre & operator=(const Gauss_Legendre &) = delete;
+		Gauss_Legendre & operator=(Gauss_Legendre const &) = delete;
 
         // #endregion 禁止されたコンストラクタ・メンバ関数
 	};
@@ -119,13 +119,13 @@ namespace gausslegendre {
         std::array<std::int32_t, 4> cpuInfo = { 0 };
 		::__cpuid(cpuInfo.data(), 1);
  			
-		const auto osUsesXSAVE_XRSTORE = cpuInfo[2] & (1 << 27) || false;
-		const auto cpuAVXSuport = cpuInfo[2] & (1 << 28) || false;
+		auto const osUsesXSAVE_XRSTORE = cpuInfo[2] & (1 << 27) || false;
+		auto const cpuAVXSuport = cpuInfo[2] & (1 << 28) || false;
  
 		if (osUsesXSAVE_XRSTORE && cpuAVXSuport)
 		{
 			// Check if the OS will save the YMM registers
-			const auto xcrFeatureMask = _xgetbv(_XCR_XFEATURE_ENABLED_MASK);
+			auto const xcrFeatureMask = ::_xgetbv(_XCR_XFEATURE_ENABLED_MASK);
 			return (xcrFeatureMask & 0x6) || false;
 		}
 #endif
@@ -133,7 +133,7 @@ namespace gausslegendre {
 	}
 
     template <typename FUNCTYPE>
-    double Gauss_Legendre::qgauss(const myfunctional::Functional<FUNCTYPE> & func, bool usesimd, double x1, double x2) const
+    double Gauss_Legendre::qgauss(myfunctional::Functional<FUNCTYPE> const & func, bool usesimd, double x1, double x2) const
     {
         auto const xm = 0.5 * (x1 + x2);
         auto const xr = 0.5 * (x2 - x1);
@@ -142,9 +142,15 @@ namespace gausslegendre {
         if (usesimd && avxSupported) {
             auto const loop = n_ >> 2;
             for (std::uint32_t i = 0; i < loop; i++) {
-                auto const xi(F64vec4(::_mm256_load_pd(&x_[(i << 2)]) * F64vec4(xr) + F64vec4(xm)));
-                sum += add_horizontal(F64vec4(::_mm256_load_pd(&w_[(i << 2)]) *
-                    F64vec4(func(xi[3]), func(xi[2]), func(xi[1]), func(xi[0]))));
+                auto const xi(
+                	F64vec4(
+                		::_mm256_load_pd(&x_[(i << 2)]) * F64vec4(xr) + F64vec4(xm)));
+                sum += add_horizontal(
+                	F64vec4(
+                		::_mm256_load_pd(&w_[(i << 2)]) *                   F64vec4(func(xi[3]),
+                func(xi[2]),
+                func(xi[1]),
+                func(xi[0]))));
             }
 
             auto const remainder = n_ & 0x03;
@@ -154,8 +160,13 @@ namespace gausslegendre {
         else if (usesimd) {
             auto const loop = n_ >> 1;
             for (std::uint32_t i = 0; i < loop; i++) {
-                auto const xi(F64vec2(::_mm_load_pd(&x_[(i << 1)]) * F64vec2(xr) + F64vec2(xm)));
-                sum += add_horizontal(F64vec2(::_mm_load_pd(&w_[(i << 1)]) * F64vec2(func(xi[1]), func(xi[0]))));
+                auto const xi(
+                	F64vec2(
+                		::_mm_load_pd(&x_[(i << 1)]) * F64vec2(xr) + F64vec2(xm)));
+                sum += add_horizontal(
+                	F64vec2(
+                		::_mm_load_pd(&w_[(i << 1)]) * F64vec2(func(xi[1]), 
+                		func(xi[0]))));
             }
 
             if (n_ & 0x01)

@@ -1,5 +1,5 @@
 ﻿/*! \file CheckPoint.cpp
-    \brief A C++ file.
+    \brief 時間計測のためのクラスの実装
 
     Copyright ©  2014 @dc1394 All Rights Reserved.
 */
@@ -76,7 +76,7 @@ namespace checkpoint {
         /*!
         チェックポイントの時間
         */
-        static const std::size_t N = 30;
+        static std::size_t const N = 30;
 
         //! A public member variable.
         /*!
@@ -149,7 +149,7 @@ namespace checkpoint {
 #ifdef _WIN32
 	void usedmem()
 	{
-		PROCESS_MEMORY_COUNTERS memInfo = {0};
+		PROCESS_MEMORY_COUNTERS memInfo = { 0 };
 		
         if (!::GetProcessMemoryInfo(::GetCurrentProcess(), &memInfo, sizeof(memInfo))) {
 			throw std::system_error(std::error_code(::GetLastError(), std::system_category()));
