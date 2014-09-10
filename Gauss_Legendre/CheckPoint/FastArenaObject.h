@@ -3,13 +3,13 @@
 
     Copyright ©  2014 @dc1394 All Rights Reserved.
 */
-
 #ifndef _FASTARENAOBJECT_H_
 #define _FASTARENAOBJECT_H_
 
 #pragma once
 
 #include "ArraiedAllocator.h"
+#include <ccomplex>
 
 namespace checkpoint {
     //! A template class.
