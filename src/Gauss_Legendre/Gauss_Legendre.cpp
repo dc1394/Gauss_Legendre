@@ -1,9 +1,9 @@
-﻿/*! \file Gauss_Legendre.cpp
+﻿/*! \file gauss_legendre.cpp
     \brief Gauss-Legendre積分を行うクラスの実装
 
     Copyright ©  2014 @dc1394 All Rights Reserved.
 */
-#include "Gauss_Legendre.h"
+#include "gauss_legendre.h"
 #include <stdexcept>
 #include <integration.h>
 

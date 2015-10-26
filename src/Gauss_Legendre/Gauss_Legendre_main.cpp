@@ -1,5 +1,5 @@
 ﻿#include "checkpoint.h"
-#include "Gauss_Legendre.h"
+#include "gauss_legendre.h"
 #include <array>            // for std::array
 #include <cmath>            // for std::sqrt
 #include <iomanip>

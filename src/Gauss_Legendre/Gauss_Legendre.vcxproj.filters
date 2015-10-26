@@ -15,18 +15,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Functional.h">
+    <ClInclude Include="gauss_legendre.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Gauss_Legendre.h">
+    <ClInclude Include="functional.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Gauss_Legendre.cpp">
+    <ClCompile Include="gauss_legendre_main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Gauss_Legendre_main.cpp">
+    <ClCompile Include="gauss_legendre.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>

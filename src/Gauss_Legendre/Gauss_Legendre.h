@@ -1,4 +1,4 @@
-﻿/*! \file Gauss_Legendre.h
+﻿/*! \file gauss_legendre.h
     \brief Gauss-Legendre積分を行うクラスの宣言
 
     Copyright ©  2014 @dc1394 All Rights Reserved.
@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "Functional.h"
+#include "functional.h"
 #include <array>                            // for std::array
 #include <cstdint>                          // for std::int32_t
 #include <vector>                           // for std::vector
