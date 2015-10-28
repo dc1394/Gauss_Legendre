@@ -8,8 +8,8 @@
 
 namespace {
     static auto constexpr DIGIT = 15U;
-    static auto constexpr LOOPMAX = 100000;
-    static auto constexpr N = 10000U;
+    static auto constexpr LOOPMAX = 1000000000;
+    static auto constexpr N = 40000U;
 }
 
 int main()

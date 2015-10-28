@@ -177,6 +177,8 @@
       <AdditionalIncludeDirectories>D:\DATA\PROGRAM\C++\gauss_legendre\src\checkpoint;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <GenerateAlternateCodePaths>AVX</GenerateAlternateCodePaths>
       <UseProcessorExtensions>AVX</UseProcessorExtensions>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <Optimization>Full</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
