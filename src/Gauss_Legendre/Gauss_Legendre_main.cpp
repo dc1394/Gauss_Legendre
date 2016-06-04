@@ -1,5 +1,5 @@
 ﻿#include "checkpoint.h"
-#include "Gauss_Legendre.h"
+#include "gauss_Legendre.h"
 #include <array>            // for std::array
 #include <cmath>            // for std::sqrt
 #include <iomanip>
@@ -8,8 +8,8 @@
 
 namespace {
     static auto constexpr DIGIT = 15U;
-    static auto constexpr LOOPMAX = 100000;
-    static auto constexpr N = 10000U;
+    static auto constexpr LOOPMAX = 1000000000UL;
+    static auto constexpr N = 10001U;
 }
 
 int main()
@@ -28,7 +28,7 @@ int main()
 
 	{
 		auto sum = 0.0;
-        for (auto i = 0; i < LOOPMAX; i++) {
+        for (auto i = 0UL; i < LOOPMAX; i++) {
             sum += gl.qgauss(func, false, 1.0, 4.0);
         }
 		
@@ -39,7 +39,7 @@ int main()
 	
 	{
 		auto sum = 0.0;
-        for (auto i = 0; i < LOOPMAX; i++) {
+        for (auto i = 0UL; i < LOOPMAX; i++) {
             sum += gl.qgauss(func, true, 1.0, 4.0);
         }
 		

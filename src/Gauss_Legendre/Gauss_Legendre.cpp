@@ -24,6 +24,8 @@ namespace gausslegendre {
         }
 
         x_.assign(x.getcontent(), x.getcontent() + x.length());
+        x2_.assign(x_.begin(), x_.end());
         w_.assign(w.getcontent(), w.getcontent() + w.length());
+        w2_.assign(w_.begin(), w_.end());
     }
 }

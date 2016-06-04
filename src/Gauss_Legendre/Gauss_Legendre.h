@@ -8,12 +8,12 @@
 
 #pragma once
 
-#include "Functional.h"
+#include "functional.h"
 #include <array>                            // for std::array
 #include <cstdint>                          // for std::int32_t
 #include <vector>                           // for std::vector
 #include <intrin.h>                         // for _xgetbv
-#include <boost/simd/memory/allocator.hpp>  // for boost::simd::allocator
+#include <boost/align/aligned_allocator.hpp>// for boost::alignment::aligned_allocator
 #include <dvec.h>                           // for F64vec4, F64vec2
 
 namespace gausslegendre {
@@ -76,15 +76,27 @@ namespace gausslegendre {
 
         //! A private member variable.
         /*!
-        Gauss-Legendreの重み（alignmentが揃っている）
+            Gauss-Legendreの重み（alignmentが揃っている）
         */
-        std::vector<double, boost::simd::allocator<double, 64>> w_;
+        std::vector<double, boost::alignment::aligned_allocator<__m256d>> w_;
+
+        //! A private member variable.
+        /*!
+            Gauss-Legendreの重み（alignmentが揃っていない）
+        */
+        std::vector<double> w2_;
 
         //! A private member variable.
         /*!
             Gauss-Legendreの節（alignmentが揃っている）
         */
-        std::vector<double, boost::simd::allocator<double, 64>> x_;
+        std::vector<double, boost::alignment::aligned_allocator<__m256d>> x_;
+        
+        //! A private member variable.
+        /*!
+            Gauss-Legendreの節（alignmentが揃っていない）
+        */
+        std::vector<double> x2_;
         
         // #endregion メンバ変数
 
@@ -152,8 +164,9 @@ namespace gausslegendre {
             }
 
             auto const remainder = n_ & 0x03;
-            for (auto i = n_ - remainder; i < n_; i++)
+            for (auto i = n_ - remainder; i < n_; i++) {
                 sum += w_[i] * func(xm + xr * x_[i]);
+            }
         }
         else if (usesimd) {
             auto const loop = n_ >> 1;
@@ -167,13 +180,14 @@ namespace gausslegendre {
                 		func(xi[0]))));
             }
 
-            if (n_ & 0x01)
+            if (n_ & 0x01) {
                 sum += w_[n_ - 1] * func(xm + xr * x_[n_ - 1]);
+            }
         }
         else {
             for (auto i = 0U; i < n_; i++) {
-                auto const xi = xm + xr * x_[i];
-                sum += w_[i] * func(xi);
+                auto const xi = xm + xr * x2_[i];
+                sum += w2_[i] * func(xi);
             }
         }
 

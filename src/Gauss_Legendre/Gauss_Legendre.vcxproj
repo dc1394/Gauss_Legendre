@@ -27,12 +27,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Functional.h" />
-    <ClInclude Include="Gauss_Legendre.h" />
+    <ClCompile Include="gauss_legendre.cpp" />
+    <ClCompile Include="gauss_legendre_main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Gauss_Legendre.cpp" />
-    <ClCompile Include="Gauss_Legendre_main.cpp" />
+    <ClInclude Include="functional.h" />
+    <ClInclude Include="gauss_legendre.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{EB91531B-17A5-468C-83A2-6CD03F7F7E06}</ProjectGuid>
