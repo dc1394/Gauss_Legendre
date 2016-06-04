@@ -1,4 +1,4 @@
-﻿/*! \file Functional.h
+﻿/*! \file functional.h
     \brief std::function<double (double)>の代わりになるクラス
 
     Copyright ©  2014 @dc1394 All Rights Reserved.

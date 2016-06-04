@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Gauss_Legendre", "src\Gauss_Legendre\Gauss_Legendre.vcxproj", "{EB91531B-17A5-468C-83A2-6CD03F7F7E06}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gauss_legendre", "src\gauss_legendre\gauss_legendre.vcxproj", "{EB91531B-17A5-468C-83A2-6CD03F7F7E06}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A4F6804C-1EF4-4D95-A44C-8AE1C2C0D274} = {A4F6804C-1EF4-4D95-A44C-8AE1C2C0D274}
 		{A02303AC-FAEE-4716-B496-8412E467DD66} = {A02303AC-FAEE-4716-B496-8412E467DD66}
